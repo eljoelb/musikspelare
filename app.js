@@ -3,7 +3,7 @@ const tracks = [
     title: "Motståndsman",
     subtitle: "Elfos Elb · 2026",
     duration: "--:--",
-    src: "motstandsman.wav"
+    src: "Motstandsman.wav"
   }
 ];
 
