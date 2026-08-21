@@ -1,10 +1,10 @@
-// Byt senare ut demo-inställningarna mot riktiga ljudfiler, till exempel:
-// { title: "Min låt", subtitle: "Singel · 2026", duration: "3:42", src: "music/min-lat.mp3" }
 const tracks = [
-  { title: "Mellan världar", subtitle: "Demo · 2026", duration: "0:24", frequency: 110, mood: "minor" },
-  { title: "Nattens signal", subtitle: "Demo · 2026", duration: "0:24", frequency: 146.83, mood: "major" },
-  { title: "Ingenstans nära", subtitle: "Demo · 2026", duration: "0:24", frequency: 98, mood: "minor" },
-  { title: "Efter ljuset", subtitle: "Demo · 2026", duration: "0:24", frequency: 130.81, mood: "major" }
+  {
+    title: "Motståndsman",
+    subtitle: "Elfos Elb · 2026",
+    duration: "--:--",
+    src: "motstandsman.wav"
+  }
 ];
 
 const audio = new Audio();
