@@ -68,7 +68,7 @@ function renderTracks() {
       <button class="album-card" id="albumToggle" type="button" aria-expanded="false" aria-controls="albumTracks">
         <span class="album-cover" aria-hidden="true">
           <span class="moon"></span>
-          <span class="album-cover-title">TANGO<br>UNDER MÅNEN</span>
+          <span class="album-cover-title">DET KRÄVS TVÅ<br>FÖR ATT DANSA TANGO</span>
         </span>
         <span class="album-info">
           <span class="album-label">Album · 2026</span>
