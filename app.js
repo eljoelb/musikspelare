@@ -2,10 +2,36 @@ const tracks = [
   {
     title: "Motståndsman",
     subtitle: "Elfos Elb · 2026",
-    duration: "--:--",
-    src: "Motstandsman.wav"
+    duration: "0:50",
+    src: "music/Motstandsman.mp3"
+  },
+  {
+    title: "Danstango",
+    subtitle: "Elfos Elb · 2026",
+    duration: "1:58",
+    src: "music/Danstango.mp3"
+  },
+  {
+    title: "Söndagstango",
+    subtitle: "Elfos Elb · 2026",
+    duration: "0:51",
+    src: "music/Sondagstango.mp3"
+  },
+  {
+    title: "Tango i moll",
+    subtitle: "Elfos Elb · 2026",
+    duration: "1:34",
+    src: "music/Tangoimoll.mp3"
+  },
+  {
+    title: "Kan du se mig",
+    subtitle: "Elfos Elb · 2026",
+    duration: "1:32",
+    src: "music/Kandusemig.mp3"
   }
 ];
+
+const tangoTrackIndexes = [0, 1, 2, 3, 4];
 
 const audio = new Audio();
 audio.preload = "metadata";
@@ -19,19 +45,40 @@ const els = {
   previous: document.querySelector("#previous"), next: document.querySelector("#next"),
   progress: document.querySelector("#progress"), current: document.querySelector("#currentTime"),
   duration: document.querySelector("#duration"), volume: document.querySelector("#volume"),
-  heroPlay: document.querySelector("#heroPlay")
+  heroPlay: document.querySelector("#heroPlay"), status: document.querySelector("#playerStatus"),
+  expand: document.querySelector("#playerExpand")
 };
 
 function renderTracks() {
-  els.list.innerHTML = tracks.map((track, index) => `
+  const renderRows = (indexes) => indexes.map((index) => {
+    const track = tracks[index];
+    return `
     <article class="track" data-index="${index}" tabindex="0" aria-label="Spela ${track.title}">
-      <span class="track-index">${String(index + 1).padStart(2, "0")}</span>
+      <span class="track-index">${String(indexes.indexOf(index) + 1).padStart(2, "0")}</span>
       <div><span class="track-title">${track.title}</span><span class="track-subtitle">${track.subtitle}</span></div>
       <span class="track-duration">${track.duration}</span>
       <button class="track-play" aria-label="Spela ${track.title}">
         <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
       </button>
-    </article>`).join("");
+    </article>`;
+  }).join("");
+
+  els.list.innerHTML = `
+    <section class="album" id="tangoAlbum">
+      <button class="album-card" id="albumToggle" type="button" aria-expanded="false" aria-controls="albumTracks">
+        <span class="album-cover" aria-hidden="true">
+          <span class="moon"></span>
+          <span class="album-cover-title">TANGO<br>UNDER MÅNEN</span>
+        </span>
+        <span class="album-info">
+          <span class="album-label">Album · 2026</span>
+          <strong>Det krävs två för att dansa tango</strong>
+          <span>Elfos Elb · 5 låtar</span>
+        </span>
+        <span class="album-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="album-tracks" id="albumTracks" inert>${renderRows(tangoTrackIndexes)}</div>
+    </section>`;
 }
 
 function createDemoAudio(track) {
@@ -66,18 +113,31 @@ function selectTrack(index, autoplay = true) {
   if (wasSame && !audio.paused) { audio.pause(); return; }
   if (!wasSame) {
     activeIndex = index;
+    setPlayerStatus("Laddar…", "loading");
     audio.src = createDemoAudio(tracks[index]);
     els.title.textContent = tracks[index].title;
-    els.meta.textContent = `Elfos Elb · ${tracks[index].subtitle}`;
+    els.meta.textContent = tracks[index].subtitle;
     els.duration.textContent = tracks[index].duration.replace(/^0:/, "0:");
-    document.querySelectorAll(".track").forEach((row, i) => row.classList.toggle("active", i === index));
+    document.querySelectorAll(".track").forEach((row, i) => {
+      row.classList.toggle("active", i === index);
+      row.setAttribute("aria-current", i === index ? "true" : "false");
+    });
   }
   els.player.classList.add("visible");
-  if (autoplay) audio.play().catch(() => {});
+  if (autoplay) audio.play().catch(() => setPlayerStatus("Kunde inte starta uppspelningen", "error"));
+}
+
+function setPlayerStatus(message = "", state = "") {
+  els.status.textContent = message;
+  document.querySelectorAll(".track").forEach((row, index) => {
+    row.classList.toggle("loading", index === activeIndex && state === "loading");
+    row.classList.toggle("error", index === activeIndex && state === "error");
+  });
 }
 
 function updatePlayState() {
   const playing = !audio.paused;
+  els.player.classList.toggle("playing", playing);
   els.icon.setAttribute("d", playing ? "M7 5h4v14H7zm6 0h4v14h-4z" : "M8 5v14l11-7z");
   els.play.setAttribute("aria-label", playing ? "Pausa" : "Spela");
   document.querySelectorAll(".track-play svg path").forEach((icon, i) => {
@@ -91,6 +151,14 @@ function formatTime(value) {
 }
 
 renderTracks();
+const album = document.querySelector("#tangoAlbum");
+const albumToggle = document.querySelector("#albumToggle");
+const albumTracks = document.querySelector("#albumTracks");
+albumToggle.addEventListener("click", () => {
+  const open = album.classList.toggle("open");
+  albumToggle.setAttribute("aria-expanded", String(open));
+  albumTracks.inert = !open;
+});
 document.querySelectorAll(".track").forEach((row) => {
   const activate = () => selectTrack(Number(row.dataset.index));
   row.addEventListener("click", activate);
@@ -100,10 +168,22 @@ els.heroPlay.addEventListener("click", () => selectTrack(activeIndex < 0 ? 0 : a
 els.play.addEventListener("click", () => activeIndex < 0 ? selectTrack(0) : audio.paused ? audio.play() : audio.pause());
 els.previous.addEventListener("click", () => selectTrack((activeIndex - 1 + tracks.length) % tracks.length));
 els.next.addEventListener("click", () => selectTrack((activeIndex + 1) % tracks.length));
+els.expand.addEventListener("click", () => {
+  const expanded = els.player.classList.toggle("expanded");
+  els.expand.setAttribute("aria-expanded", String(expanded));
+  els.expand.setAttribute("aria-label", expanded ? "Stäng spelaren" : "Öppna spelaren");
+  document.body.classList.toggle("player-open", expanded);
+});
 els.volume.addEventListener("input", () => { audio.volume = Number(els.volume.value); els.volume.style.setProperty("--value", `${els.volume.value * 100}%`); });
 els.progress.addEventListener("input", () => { if (audio.duration) audio.currentTime = (Number(els.progress.value) / 100) * audio.duration; });
-audio.addEventListener("play", updatePlayState);
+audio.addEventListener("play", () => {
+  setPlayerStatus();
+  updatePlayState();
+});
 audio.addEventListener("pause", updatePlayState);
+audio.addEventListener("waiting", () => setPlayerStatus("Laddar…", "loading"));
+audio.addEventListener("canplay", () => setPlayerStatus());
+audio.addEventListener("error", () => setPlayerStatus("Ljudfilen kunde inte spelas", "error"));
 audio.addEventListener("ended", () => selectTrack((activeIndex + 1) % tracks.length));
 audio.addEventListener("timeupdate", () => {
   const percent = audio.duration ? audio.currentTime / audio.duration * 100 : 0;
@@ -114,4 +194,15 @@ audio.addEventListener("timeupdate", () => {
 });
 audio.volume = Number(els.volume.value);
 document.querySelector("#year").textContent = new Date().getFullYear();
+document.addEventListener("keydown", (event) => {
+  const tag = event.target.tagName;
+  if (["INPUT", "BUTTON", "A", "TEXTAREA"].includes(tag)) return;
+  if (event.code === "Space") {
+    event.preventDefault();
+    activeIndex < 0 ? selectTrack(0) : audio.paused ? audio.play() : audio.pause();
+  }
+  if (event.key === "ArrowLeft" && audio.duration) audio.currentTime = Math.max(0, audio.currentTime - 5);
+  if (event.key === "ArrowRight" && audio.duration) audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+  if (event.key === "Escape" && els.player.classList.contains("expanded")) els.expand.click();
+});
 window.addEventListener("beforeunload", () => generatedUrls.forEach(URL.revokeObjectURL));

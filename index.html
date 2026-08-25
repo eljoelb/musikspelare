@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#09090b" />
     <meta name="description" content="Elfos Elb — musik, direkt från artisten." />
     <title>Elfos Elb — Musik</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -52,9 +53,9 @@
         <div class="section-heading">
           <div>
             <span class="section-number">01</span>
-            <h2>Senaste spåren</h2>
+            <h2>Musik</h2>
           </div>
-          <p>Hör musiken direkt här — utan mellanhänder.</p>
+          <p>Album och singlar — direkt från mig.</p>
         </div>
         <div class="track-list" id="trackList"></div>
       </section>
@@ -63,7 +64,7 @@
         <span class="section-number">02</span>
         <div>
           <p class="about-lead">Jag är Elfos Elb.</p>
-          <p class="about-copy">Jag skapar musik på mitt eget sätt och delar den här, direkt med dig. Inga algoritmer. Bara ljud, känsla och ett rum att stanna i en stund.</p>
+          <p class="about-copy">Jag skapar musik på mitt eget sätt och delar den här, direkt med dig. Mina instrument är dragspel, gitarr och kontrabas. Bara ljud, känsla och ett rum att stanna i en stund.</p>
         </div>
         <div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </section>
@@ -74,10 +75,13 @@
       <span>Musik, på egna villkor.</span>
     </footer>
 
-    <div class="player" id="player">
+    <div class="player" id="player" role="region" aria-label="Musikspelare">
+      <button class="player-expand" id="playerExpand" type="button" aria-label="Öppna spelaren" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14l5-5 5 5" /></svg>
+      </button>
       <div class="now-playing">
         <div class="mini-cover"><span>EE</span></div>
-        <div><strong id="playerTitle">Välj ett spår</strong><span id="playerMeta">Elfos Elb</span></div>
+        <div><strong id="playerTitle">Välj ett spår</strong><span id="playerMeta">Elfos Elb</span><span class="player-status" id="playerStatus" aria-live="polite"></span></div>
       </div>
       <div class="player-center">
         <div class="controls">
