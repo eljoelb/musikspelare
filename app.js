@@ -48,6 +48,7 @@ const cygnusTrackIndexes = [5, 6];
 
 const audio = new Audio();
 audio.preload = "metadata";
+audio.loop = false;
 let activeIndex = -1;
 let generatedUrls = [];
 
@@ -180,6 +181,14 @@ function formatTime(value) {
   return `${Math.floor(value / 60)}:${String(Math.floor(value % 60)).padStart(2, "0")}`;
 }
 
+function playNextTrack({ wrap = false } = {}) {
+  if (activeIndex < tracks.length - 1) {
+    selectTrack(activeIndex + 1);
+  } else if (wrap && tracks.length) {
+    selectTrack(0);
+  }
+}
+
 renderTracks();
 document.querySelectorAll(".album").forEach((album) => {
   const albumToggle = album.querySelector(".album-card");
@@ -198,7 +207,7 @@ document.querySelectorAll(".track").forEach((row) => {
 els.heroPlay.addEventListener("click", () => selectTrack(activeIndex < 0 ? 0 : activeIndex));
 els.play.addEventListener("click", () => activeIndex < 0 ? selectTrack(0) : audio.paused ? audio.play() : audio.pause());
 els.previous.addEventListener("click", () => selectTrack((activeIndex - 1 + tracks.length) % tracks.length));
-els.next.addEventListener("click", () => selectTrack((activeIndex + 1) % tracks.length));
+els.next.addEventListener("click", () => playNextTrack({ wrap: true }));
 els.expand.addEventListener("click", () => {
   const expanded = els.player.classList.toggle("expanded");
   els.expand.setAttribute("aria-expanded", String(expanded));
@@ -215,7 +224,7 @@ audio.addEventListener("pause", updatePlayState);
 audio.addEventListener("waiting", () => setPlayerStatus("Laddar…", "loading"));
 audio.addEventListener("canplay", () => setPlayerStatus());
 audio.addEventListener("error", () => setPlayerStatus("Ljudfilen kunde inte spelas", "error"));
-audio.addEventListener("ended", () => selectTrack((activeIndex + 1) % tracks.length));
+audio.addEventListener("ended", () => playNextTrack());
 audio.addEventListener("timeupdate", () => {
   const percent = audio.duration ? audio.currentTime / audio.duration * 100 : 0;
   els.progress.value = percent;
