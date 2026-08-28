@@ -28,10 +28,23 @@ const tracks = [
     subtitle: "Elfos Elb · 2026",
     duration: "1:32",
     src: "music/Kandusemig.mp3"
+  },
+  {
+    title: "Deneb",
+    subtitle: "Elfos Elb · Cygnus · 2026",
+    duration: "2:04",
+    src: "music/Cygnus/Deneb.mp3"
+  },
+  {
+    title: "Albireo",
+    subtitle: "Elfos Elb · Cygnus · 2026",
+    duration: "2:58",
+    src: "music/Cygnus/Albireo.mp3"
   }
 ];
 
 const tangoTrackIndexes = [0, 1, 2, 3, 4];
+const cygnusTrackIndexes = [5, 6];
 
 const audio = new Audio();
 audio.preload = "metadata";
@@ -78,6 +91,23 @@ function renderTracks() {
         <span class="album-chevron" aria-hidden="true">⌄</span>
       </button>
       <div class="album-tracks" id="albumTracks" inert>${renderRows(tangoTrackIndexes)}</div>
+    </section>`;
+
+  els.list.innerHTML += `
+    <section class="album album-cygnus">
+      <button class="album-card" type="button" aria-expanded="false" aria-controls="cygnusTracks">
+        <span class="album-cover" aria-hidden="true">
+          <span class="star"></span>
+          <span class="album-cover-title">CYGNUS</span>
+        </span>
+        <span class="album-info">
+          <span class="album-label">Album · 2026</span>
+          <strong>Cygnus</strong>
+          <span>Elfos Elb · 2 låtar</span>
+        </span>
+        <span class="album-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="album-tracks" id="cygnusTracks" inert>${renderRows(cygnusTrackIndexes)}</div>
     </section>`;
 }
 
@@ -151,13 +181,14 @@ function formatTime(value) {
 }
 
 renderTracks();
-const album = document.querySelector("#tangoAlbum");
-const albumToggle = document.querySelector("#albumToggle");
-const albumTracks = document.querySelector("#albumTracks");
-albumToggle.addEventListener("click", () => {
-  const open = album.classList.toggle("open");
-  albumToggle.setAttribute("aria-expanded", String(open));
-  albumTracks.inert = !open;
+document.querySelectorAll(".album").forEach((album) => {
+  const albumToggle = album.querySelector(".album-card");
+  const albumTracks = album.querySelector(".album-tracks");
+  albumToggle.addEventListener("click", () => {
+    const open = album.classList.toggle("open");
+    albumToggle.setAttribute("aria-expanded", String(open));
+    albumTracks.inert = !open;
+  });
 });
 document.querySelectorAll(".track").forEach((row) => {
   const activate = () => selectTrack(Number(row.dataset.index));

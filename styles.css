@@ -78,6 +78,11 @@ h2 { margin: 0; font: 700 clamp(2.2rem, 4vw, 3.5rem) "Manrope"; letter-spacing: 
 .album-cover::after { content: ""; position: absolute; width: 120%; height: 45%; left: -10%; bottom: -20%; border: 1px solid rgba(185,255,102,.35); border-radius: 50%; transform: rotate(-8deg); }
 .moon { position: absolute; width: 32px; height: 32px; right: 27px; top: 26px; border-radius: 50%; background: #eee9cf; box-shadow: 0 0 28px rgba(238,233,207,.28); }
 .album-cover-title { position: absolute; left: 17px; bottom: 18px; z-index: 1; font: 800 .72rem/1.25 "Manrope"; letter-spacing: .12em; }
+.album-cygnus .album-card { background: linear-gradient(110deg, rgba(41,116,164,.17), rgba(255,255,255,.025)); }
+.album-cygnus .album-card:hover { background: linear-gradient(110deg, rgba(41,116,164,.24), rgba(255,255,255,.04)); }
+.album-cygnus .album-cover { background: radial-gradient(circle at 72% 25%, rgba(255,255,255,.9) 0 1px, transparent 2px), radial-gradient(circle at 30% 37%, rgba(185,255,102,.75) 0 1px, transparent 2px), radial-gradient(circle at 56% 61%, rgba(255,255,255,.55) 0 1px, transparent 2px), linear-gradient(145deg, #174763, #101b31 55%, #080910); }
+.album-cygnus .album-cover::after { border-color: rgba(105,194,255,.45); transform: rotate(12deg); }
+.star { position: absolute; width: 7px; height: 7px; right: 28px; top: 28px; border-radius: 50%; background: #f4fbff; box-shadow: 0 0 8px #fff, 0 0 24px #69c2ff; }
 .album-info { display: flex; flex-direction: column; align-items: flex-start; }
 .album-info strong { margin: 8px 0 7px; font: 700 clamp(1.65rem, 3vw, 2.55rem) "Manrope"; letter-spacing: -.045em; }
 .album-info > span:last-child, .album-label { color: var(--muted); font-size: .82rem; }
