@@ -40,11 +40,17 @@ const tracks = [
     subtitle: "Elfos Elb · Cygnus · 2026",
     duration: "2:58",
     src: "music/Cygnus/Albireo.mp3"
+  },
+  {
+    title: "Alfa Cygni",
+    subtitle: "Elfos Elb · Cygnus · 2026",
+    duration: "2:31",
+    src: "music/Cygnus/Alfa Cygni.mp3"
   }
 ];
 
 const tangoTrackIndexes = [0, 1, 2, 3, 4];
-const cygnusTrackIndexes = [5, 6];
+const cygnusTrackIndexes = [5, 6, 7];
 
 const audio = new Audio();
 audio.preload = "metadata";
@@ -104,7 +110,7 @@ function renderTracks() {
         <span class="album-info">
           <span class="album-label">Album · 2026</span>
           <strong>Cygnus</strong>
-          <span>Elfos Elb · 2 låtar</span>
+          <span>Elfos Elb · 3 låtar</span>
         </span>
         <span class="album-chevron" aria-hidden="true">⌄</span>
       </button>
